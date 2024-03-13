@@ -4,18 +4,18 @@ This repo is for testing out different solutions for reaching docker from the ho
 
 Branches are used to test different configurations. These configurations and potentially branch-specific setup instructions will be detailed directly below in the "This [BRANCH_NAME] branch" section.
 
-# This "main" branch
+# This "bc/proxy-no-etc-hosts" branch
 
 ## Configuration
 
-This is the base case without any configuration to try and handle hostnames in a universal way.
+Adds the `nginxproxy/nginx-proxy` docker service and sets `VIRTUAL_HOST` environment variable in the `cloud-nine-backend` and `happy-life-bank services` without setting `/etc/hosts`. This was inspired by https://kevinjalbert.com/access-local-docker-containers-by-domain-names-instead-of-ports/ but cannot be used to the effect that I had hoped. I thought it's may circumvent needing to set /etc/hosts because the author doesn't do so, but that's because he's using a host like "whoami.localhost"
+and apparently it's the `.localhost` which makes it "just work." In retrospect this makes sense, as the docker container shouldn't have any effect on how the host machine resolves hostnames. T[he proxy docker image readme](https://github.com/nginx-proxy/nginx-proxy) also explicitly mentions DNS needs to resolve the virtual host to use it from the host machine.
 
-The urls used from the host machine should be localhost, such as `http://localhost:4100`.
-The urls defined in the docker-compose and used in the docker services are the actual service name such as `http://cloud-nine-backend:3100` (called from `happy-life-bank`).
+The urls for the hostmachine must still be localhost:3100 and localhost:4100.
 
 ## Local Environment Setup
 
-None
+None (just ensure there are no hlb/c9 entries in `/etc/hosts`)
 
 # Running
 
@@ -33,7 +33,7 @@ Start docker containers
 - Go to http://localhost:3100/d2d and seed good response from peered service.
 - Go to http://cloud-nine-backend and see failed response (cant resolve the host).
 
-Can repeat and see equivalent results for happy-life-bank (localhost:4100, ).
+Can repeat and see equivalent results for happy-life-bank.
 
 # About Backend services
 

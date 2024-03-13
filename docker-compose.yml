@@ -1,16 +1,26 @@
 version: "3.8"
 
 services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
   happy-life-backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
+      # TODO: do i even need  these w/ the nginx proxy?
       - "4100:4100"
     environment:
       - PORT=4100
       - NAME=Happy Life
       - PEER_URL=http://cloud-nine-backend:3100
+      - VIRTUAL_HOST=happy-life-backend
+      - VIRTUAL_PORT=4100
     networks:
       - my_network
 
@@ -24,6 +34,8 @@ services:
       - PORT=3100
       - NAME=Cloud Nine
       - PEER_URL=http://happy-life-backend:4100
+      - VIRTUAL_HOST=cloud-nine-backend
+      - VIRTUAL_PORT=3100
     networks:
       - my_network
 
