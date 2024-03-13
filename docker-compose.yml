@@ -9,7 +9,7 @@ services:
       - "4100:4100"
     environment:
       - PORT=4100
-      - NAME=Happy Life Bank
+      - NAME=Happy Life
       - PEER_URL=http://cloud-nine-backend:3100
     networks:
       - my_network
@@ -22,7 +22,7 @@ services:
       - "3100:3100"
     environment:
       - PORT=3100
-      - NAME=Cloud Nine Wallet
+      - NAME=Cloud Nine
       - PEER_URL=http://happy-life-backend:4100
     networks:
       - my_network
