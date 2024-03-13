@@ -4,24 +4,30 @@ This repo is for testing out different solutions for reaching docker from the ho
 
 Branches are used to test different configurations. These configurations and potentially branch-specific setup instructions will be detailed directly below in the "This [BRANCH_NAME] branch" section.
 
-# This "main" branch
+# This "bc/add-etc-hosts-no-proxy" branch
 
 ## Configuration
 
-This is the base case without any configuration to try and handle hostnames in a universal way.
+This is the base case plus adding cloud-nine-wallet and happy-life-bank services to the host machine's `/etc/hosts` file.
 
-The urls used from the host machine should be localhost, such as `http://localhost:4100`.
-The urls defined in the docker-compose and used in the docker services are the actual service name such as `http://cloud-nine-backend:3100` (called from `happy-life-bank`).
+The Urls from the hostmachine can use the service name `http://cloud-nine-backend:3100`.
 
 ## Local Environment Setup
 
-None
+Add the following lines to `/etc/hosts`:
+
+    127.0.0.1 cloud-nine-backend
+    127.0.0.1 happy-life-backend
 
 # Running
+
+## First time setup:
 
 Install and build backend from root directory
 
     ( cd backend && pnpm i && pnpm build)
+
+## Run
 
 Start docker containers
 
@@ -31,7 +37,8 @@ Start docker containers
 
 - Go to http://localhost:3100 and see good response from service.
 - Go to http://localhost:3100/d2d and seed good response from peered service.
-- Go to http://cloud-nine-backend and see failed response (cant resolve the host).
+- Go to http://cloud-nine-backend and see successful response.
+- Go to http://cloud-nine-backend:3100/d2d and see successful response.
 
 Can repeat and see equivalent results for happy-life-bank (localhost:4100, ).
 
